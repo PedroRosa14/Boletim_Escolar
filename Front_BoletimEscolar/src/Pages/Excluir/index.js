@@ -9,6 +9,7 @@ export default function ExcluirNotas({ navigation }) {
   const [aluno, setAluno] = useState('');
   const [notas, setNotas] = useState(['', '', '']);
   const [media, setMedia] = useState('');
+   const [url, setUrl] = useState(''); // <- novo estado
 
   const handleNotaChange = (text, index) => {
     const novasNotas = [...notas];
@@ -75,7 +76,7 @@ export default function ExcluirNotas({ navigation }) {
         <View style={styles.tableContainer}>
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
-              {['Nome', 'Matemática', 'Português', 'História', 'Média'].map((col, i) => (
+              {['Nome', 'Matemática', 'Português', 'História', 'Média', 'URL do Aluno'].map((col, i) => (
                 <View key={i} style={styles.cell}>
                   <Text style={styles.headerText}>{col}</Text>
                 </View>
@@ -104,6 +105,12 @@ export default function ExcluirNotas({ navigation }) {
                 placeholder="Média"
                 value={media}
                 editable={false}
+              />
+                <TextInput
+                style={styles.inputCell}
+                placeholder="Url"
+                value={url}
+                onChangeText={setUrl}
               />
             </View>
           </View>

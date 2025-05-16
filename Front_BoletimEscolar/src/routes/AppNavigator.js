@@ -6,6 +6,7 @@ import TabelaNotas from '../Pages/Ler';
 import Adicionar from '../Pages/Adicionar';
 import EditarNotas from '../Pages/Editar';
 import ExcluirNotas from '../Pages/Excluir';
+import Perfil from '../Pages/Perfil';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,11 @@ export default function AppNavigator() {
         <Stack.Screen
           name="Excluir"
           component={ExcluirNotas}
+          options={{ headerShown: false }}
+        />
+         <Stack.Screen
+          name="Perfil"
+          component={Perfil}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

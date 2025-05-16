@@ -10,6 +10,7 @@ export default function Adicionar({ navigation }) {
   const [aluno, setAluno] = useState('');
   const [notas, setNotas] = useState(['', '', '']);
   const [media, setMedia] = useState('');
+  const [url, setUrl] = useState(''); // <- novo estado
 
   const handleNotaChange = (text, index) => {
     const novasNotas = [...notas];
@@ -29,54 +30,50 @@ export default function Adicionar({ navigation }) {
 
   return (
     <View style={styles.container}>
-
       <View style={styles.header}>
-           <Image
-             source={require('../../../assets/mygrades_semfundo.png')}
-             style={styles.logo}
-             resizeMode="contain"
-           />
-           <TouchableOpacity onPress={() => setMenuVisible(true)} style={styles.menuIcon}>
-             <Ionicons name="menu" size={32} color="#fff" />
-           </TouchableOpacity>
-         </View>
+        <Image
+          source={require('../../../assets/mygrades_semfundo.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+        <TouchableOpacity onPress={() => setMenuVisible(true)} style={styles.menuIcon}>
+          <Ionicons name="menu" size={32} color="#fff" />
+        </TouchableOpacity>
+      </View>
 
-      {/* Modal lateral */}
-           <Modal
-             animationType="slide"
-             transparent={true}
-             visible={menuVisible}
-             onRequestClose={() => setMenuVisible(false)}
-           >
-             <View style={styles.modalOverlay}>
-               <View style={styles.modalMenu}>
-                 <TouchableOpacity onPress={() => setMenuVisible(false)} style={styles.closeButton}>
-                   <Ionicons name="close" size={28} color="#fff" />
-                 </TouchableOpacity>
-     
-                 <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Inicio'); }}>
-                   <Text style={styles.menuItem}>Início</Text>
-                 </TouchableOpacity>
-                 <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Cadastro'); }}>
-                   <Text style={styles.menuItem}>Cadastrar</Text>
-                 </TouchableOpacity>
-                     <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Editar'); }}>
-                    <Text style={styles.menuItem}>Editar</Text>
-                      </TouchableOpacity>
-                             <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Excluir'); }}>
-                               <Text style={styles.menuItem}>Excluir</Text>
-                             </TouchableOpacity>
-     
-               </View>
-             </View>
-           </Modal>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={menuVisible}
+        onRequestClose={() => setMenuVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalMenu}>
+            <TouchableOpacity onPress={() => setMenuVisible(false)} style={styles.closeButton}>
+              <Ionicons name="close" size={28} color="#fff" />
+            </TouchableOpacity>
 
-      {/* Tabela de entrada */}
+            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Inicio'); }}>
+              <Text style={styles.menuItem}>Início</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Cadastro'); }}>
+              <Text style={styles.menuItem}>Cadastrar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Editar'); }}>
+              <Text style={styles.menuItem}>Editar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Excluir'); }}>
+              <Text style={styles.menuItem}>Excluir</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.tableContainer}>
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
-              {['Nome', 'Matemática', 'Português', 'História', 'Média'].map((col, i) => (
+              {['Nome', 'Matemática', 'Português', 'História', 'Média', 'URL do Aluno'].map((col, i) => (
                 <View key={i} style={styles.cell}>
                   <Text style={styles.headerText}>{col}</Text>
                 </View>
@@ -106,17 +103,21 @@ export default function Adicionar({ navigation }) {
                 value={media}
                 editable={false}
               />
+              <TextInput
+                style={styles.inputCell}
+                placeholder="Url"
+                value={url}
+                onChangeText={setUrl}
+              />
             </View>
           </View>
 
-          {/* Botão Salvar */}
           <TouchableOpacity style={styles.botaoAdicionar}>
             <Text style={styles.textoBotao}>Salvar</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
 
-      {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>© 2025 MyGrades</Text>
       </View>
@@ -131,23 +132,22 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     alignSelf: 'center',
-    marginTop: -20, // Ajuste para encaixar bem visualmente
+    marginTop: -20,
   },
-  
+
   menuIcon: {
     position: 'absolute',
     right: 20,
     top: 20,
   },
-  
+
   header: {
-    height: 80, // aumente para acomodar o logo
+    height: 80,
     backgroundColor: '#2980b9',
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 20,
   },
-  
 
   modalOverlay: {
     flex: 1,
