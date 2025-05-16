@@ -1,9 +1,10 @@
 // src/pages/ler/index.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+//import { useBoletim } from '../../services/api.js'
 
 const alunos = [
   { nome: 'Pedro', notas: [10, 5, 9], media: 5 },
@@ -28,6 +29,16 @@ function getEmote(media) {
 
 export default function TabelaNotas({ navigation }) {
   const [menuVisible, setMenuVisible] = useState(false);
+
+  //GET
+  //export default function TabelaNotas({ navigation }) {
+    //const [menuVisible, setMenuVisible] = useState(false);
+    //const { alunos, loading, error, fetchAlunos } = useBoletim();
+  
+    //useEffect(() =>{
+    //  fetchAlunos()
+    //},[fetchAlunos])
+    //console.log("alunos", alunos)
 
   return (
     <View style={styles.container}>
