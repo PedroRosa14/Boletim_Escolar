@@ -4,7 +4,7 @@ import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-//import { useBoletim } from '../../services/api.js'
+import { useBoletim } from '../../services/api.js'
 
 const alunos = [
   { nome: 'Pedro', notas: [10, 5, 9], media: 5 },
@@ -27,18 +27,21 @@ function getEmote(media) {
   return emotes.triste;
 }
 
-export default function TabelaNotas({ navigation }) {
-  const [menuVisible, setMenuVisible] = useState(false);
-
-  //GET
-  //export default function TabelaNotas({ navigation }) {
-    //const [menuVisible, setMenuVisible] = useState(false);
-    //const { alunos, loading, error, fetchAlunos } = useBoletim();
+  export default function TabelaNotas({ navigation }) {
+    const [menuVisible, setMenuVisible] = useState(false);
+    const { alunos, loading, error, fetchAlunos, deleteAluno } = useBoletim();
   
+    //teste get
     //useEffect(() =>{
-    //  fetchAlunos()
-    //},[fetchAlunos])
-    //console.log("alunos", alunos)
+    //fetchAlunos()
+    //},[fetchAlunos]);
+    //console.log("alunos", alunos);
+
+    //teste delete
+      //useEffect(() =>{
+      //deleteAluno()
+      //},[deleteAluno]);
+    //console.log("aluno deletado"); 
 
   return (
     <View style={styles.container}>
