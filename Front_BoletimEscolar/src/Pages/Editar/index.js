@@ -2,88 +2,85 @@ import React, { useState, useEffect } from 'react';
 import {
   View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Modal, Image, Alert
 } from 'react-native';
-
 import { Ionicons } from '@expo/vector-icons';
-import { useRoute, useNavigation } from '@react-navigation/native';
-import { useBoletim } from '../../services/api.js'; // seu hook que chama a API
 
-export default function Editar() {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { id } = route.params || {};
+import { useBoletim } from '../../services/api.js';  // sua store Zustand
 
+export default function EditarNotas({ navigation, route }) {
   const [menuVisible, setMenuVisible] = useState(false);
+
+  const id = route.params?.id;
+
+  // Funções da store
+  const fetchAlunoById = useBoletim(state => state.fetchAlunoById);
+  const updateAluno = useBoletim(state => state.updateAluno);
+  const atualAluno = useBoletim(state => state.atualAluno);
+
+  // Estados locais para edição
   const [nome, setNome] = useState('');
-  const [notamat, setNotaMat] = useState('');
-  const [notaport, setNotaPort] = useState('');
-  const [notahist, setNotaHist] = useState('');
+  const [notamat, setNotamat] = useState('');
+  const [notaport, setNotaport] = useState('');
+  const [notahist, setNotahist] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const { atualAluno, fetchAlunoById, loading, error, updateFormData, updateAluno } = useBoletim();
-
-  // Busca aluno ao carregar a tela
+  // Puxar aluno ao abrir a tela
   useEffect(() => {
     if (id) {
       fetchAlunoById(id);
     }
   }, [id]);
 
-  // Preenche campos ao mudar o aluno atual
+  // Quando atualAluno mudar, preenche os campos
   useEffect(() => {
     if (atualAluno) {
       setNome(atualAluno.nome || '');
-      setNotaMat(String(atualAluno.notamat ?? ''));
-      setNotaPort(String(atualAluno.notaport ?? ''));
-      setNotaHist(String(atualAluno.notahist ?? ''));
+      setNotamat(String(atualAluno.notamat ?? ''));
+      setNotaport(String(atualAluno.notaport ?? ''));
+      setNotahist(String(atualAluno.notahist ?? ''));
     }
   }, [atualAluno]);
 
+  // Função para calcular média
   const calcularMedia = () => {
-    const m = (parseFloat(notamat) + parseFloat(notaport) + parseFloat(notahist)) / 3;
-    return isNaN(m) ? '' : m.toFixed(2);
+    const notas = [
+      parseFloat(notamat),
+      parseFloat(notaport),
+      parseFloat(notahist),
+    ].filter(n => !isNaN(n));
+
+    if (notas.length === 3) {
+      return (notas.reduce((acc, val) => acc + val, 0) / 3).toFixed(2);
+    }
+    return '';
   };
 
-  const handleEditar = async () => {
-    if (!nome || !notamat || !notaport || !notahist) {
-      Alert.alert('Preencha todos os campos');
-      return;
-    }
-
-    const novoAluno = {
-      nome,
-      notamat: parseFloat(notamat),
-      notaport: parseFloat(notaport),
-      notahist: parseFloat(notahist),
-    };
-
-    try {
-      await updateFormData(novoAluno);
-      await updateAluno(id);
-
-      Alert.alert('Dados atualizados com sucesso!');
-      navigation.goBack();
-
-    } catch (error) {
-      console.error('Erro ao atualizar aluno:', error);
-      Alert.alert('Erro ao salvar alterações');
-    }
-  };
-
-  if (loading) {
-    return (
-      <View style={[styles.container, {justifyContent: 'center', alignItems: 'center'}]}>
-        <Text style={{fontSize: 18, color: '#333'}}>Carregando dados do aluno...</Text>
-      </View>
-    );
-  }
-
-  if (error) {
-    return (
-      <View style={[styles.container, {justifyContent: 'center', alignItems: 'center'}]}>
-        <Text style={{fontSize: 18, color: 'red'}}>{error}</Text>
-      </View>
-    );
-  }
-
+  const handleSalvar = async () => {
+        if (!nome.trim() || !notamat || !notaport || !notahist) {
+          return Alert.alert('Atenção', 'Preencha todos os campos');
+        }
+    
+        setLoading(true);
+    
+        const novoAluno = {
+          nome: nome.trim(),
+          notamat: parseFloat(notamat),
+          notaport: parseFloat(notaport),
+          notahist: parseFloat(notahist),
+          notamedia: parseFloat(calcularMedia()),
+        };
+    
+        try {
+          // Corrigir aqui: Passe o id e os dados do aluno para a função updateAluno
+          await updateAluno(id, novoAluno); 
+          Alert.alert('Sucesso', 'Aluno atualizado com sucesso!');
+          navigation.goBack();
+        } catch (error) {
+          Alert.alert('Erro', 'Não foi possível atualizar o aluno.');
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -127,7 +124,7 @@ export default function Editar() {
         </View>
       </Modal>
 
-      {/* Tabela de edição */}
+      {/* Conteúdo com inputs e botões */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.tableContainer}>
           <View style={styles.table}>
@@ -150,51 +147,56 @@ export default function Editar() {
                 style={styles.inputCell}
                 placeholder="Matemática"
                 value={notamat}
-                onChangeText={setNotaMat}
+                onChangeText={setNotamat}
                 keyboardType="numeric"
               />
               <TextInput
                 style={styles.inputCell}
                 placeholder="Português"
                 value={notaport}
-                onChangeText={setNotaPort}
+                onChangeText={setNotaport}
                 keyboardType="numeric"
               />
               <TextInput
                 style={styles.inputCell}
                 placeholder="História"
                 value={notahist}
-                onChangeText={setNotaHist}
+                onChangeText={setNotahist}
                 keyboardType="numeric"
               />
-              <TextInput
-                style={[styles.inputCell, { backgroundColor: '#eee' }]}
-                placeholder="Média"
-                value={calcularMedia()}
-                editable={false}
-              />
+              <View style={[styles.inputCell, { justifyContent: 'center', alignItems: 'center' }]}>
+                <Text>{calcularMedia()}</Text>
+              </View>
             </View>
           </View>
 
-          {/* Botões Editar e Cancelar */}
           <View style={styles.botoesContainer}>
-            <TouchableOpacity style={styles.botaoEditar} onPress={handleEditar}>
-              <Text style={styles.textoBotao}>Salvar</Text>
+            <TouchableOpacity
+              style={[styles.botaoSalvar, loading && { backgroundColor: '#888' }]}
+              onPress={handleSalvar}
+              disabled={loading}
+            >
+              <Text style={styles.textoBotao}>{loading ? 'Salvando...' : 'Salvar'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.botaoCancelar} onPress={() => navigation.goBack()}>
+
+            <TouchableOpacity
+              style={styles.botaoCancelar}
+              onPress={() => navigation.goBack()}
+            >
               <Text style={styles.textoBotao}>Cancelar</Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
 
-      {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>© 2025 MyGrades</Text>
       </View>
     </View>
   );
 }
+
+// Reaproveite os estilos da tela ExcluirNotas, com só uma adição para o botão salvar:
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#A2C8F2' },
@@ -265,42 +267,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.5,
-    borderColor: '#ccc',
+    borderRightWidth: 1,
+    borderRightColor: '#fff',
   },
   headerText: {
     color: '#fff',
     fontWeight: 'bold',
-    textAlign: 'center',
   },
   inputCell: {
     minWidth: 150,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 0.5,
-    borderColor: '#ccc',
+    paddingVertical: 10,
+    paddingHorizontal: 8,
+    borderWidth: 1,
+    borderColor: '#2980b9',
     textAlign: 'center',
-    backgroundColor: '#fff',
+    fontSize: 16,
   },
 
   botoesContainer: {
+    marginTop: 15,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 20,
     gap: 20,
-    marginBottom: 40,
   },
-  botaoEditar: {
-    backgroundColor: '#e3ea1e',
+  botaoSalvar: {
+    backgroundColor: '#2980b9',
     paddingVertical: 10,
     paddingHorizontal: 25,
-    borderRadius: 20,
+    borderRadius: 6,
   },
   botaoCancelar: {
-    backgroundColor: '#000000',
+    backgroundColor: '#bbb',
     paddingVertical: 10,
     paddingHorizontal: 25,
-    borderRadius: 20,
+    borderRadius: 6,
   },
   textoBotao: {
     color: '#fff',
@@ -309,12 +309,11 @@ const styles = StyleSheet.create({
 
   footer: {
     backgroundColor: '#2980b9',
-    paddingVertical: 30,
-    alignItems: 'center',
+    height: 50,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   footerText: {
     color: '#fff',
-    fontSize: 14,
   },
 });

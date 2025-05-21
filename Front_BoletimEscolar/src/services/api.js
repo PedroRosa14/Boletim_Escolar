@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
-const URL = "http://localhost:3000";
+const URL = "http://localhost:3000"; // Certifique-se que esta URL está correta para seu ambiente
 
 export const useBoletim = create((set , get) => ({
     alunos:[],
@@ -18,7 +18,7 @@ export const useBoletim = create((set , get) => ({
     },
 
     setFormData: (formData) => set({formData}),
-    resetForm: () => set({ formData: {nome: "", notamat:"", notaport:"", notahist:"", notamedia:""  }}),
+    resetForm: () => set({ formData: {nome: "", notamat:"", notaport:"", notahist:"", notamedia:"" }}),
 
     addAluno: async (e) => {
         e.preventDefault();
@@ -27,70 +27,91 @@ export const useBoletim = create((set , get) => ({
             const {formData} = get();
             await axios.post(`${URL}/api/alunos`, formData,);
             await get().fetchAlunos();
-            get.resetForm();
+            get.resetForm(); // Aqui o resetForm faz sentido para limpar o formulário de adição
             console.log("Aluno adicionado com sucesso");
         } catch (error) {
             console.error("Erro ao adicionar aluno:", error);
+            // Poderia adicionar um set({ error: "Mensagem de erro" }); aqui
         }finally{
             set({loading:false})
         }
     },
 
-    //get
+    // GET todos os alunos
     fetchAlunos: async () => {
         set({loading:true});
         try {
             const response = await axios.get(`${URL}/api/alunos`)
             set({alunos:response.data.data});
+            set({error: null}); // Limpa erros anteriores ao buscar com sucesso
         } catch (error) {
-            if (error.status == 429) set({error: "limite de requests excedido"});
-            else set({error: "erro interno do servidor"});
+            console.error("Erro ao buscar alunos:", error);
+            if (error.response && error.response.status === 429) {
+                set({error: "Limite de requests excedido. Tente novamente mais tarde."});
+            } else {
+                set({error: "Erro interno do servidor ao buscar alunos."});
+            }
         }finally{
             set({loading:false})
         }
     },
 
-    //get id
+    // GET aluno por ID
     fetchAlunoById: async (id) => {
         set({loading:true});
         try {
             const response = await axios.get(`${URL}/api/alunos/${id}`);
+            // Ao buscar por ID, você preenche tanto 'atualAluno' quanto 'formData' para pré-popular o formulário de edição
             set({atualAluno: response.data.data, formData: response.data.data, error:null,});
         } catch (error) {
-            console.error("Erro ao buscar aluno:", error);
-            set({error: "Erro ao buscar aluno", atualAluno: null});
+            console.error("Erro ao buscar aluno por ID:", error);
+            set({error: "Erro ao buscar aluno. Verifique o ID."});
+            set({atualAluno: null, formData: get().resetForm()}); // Limpa o atualAluno e o formData em caso de erro
         }finally{
             set({loading:false})
         }
     },
 
-    //delete
+    // DELETE aluno
     deleteAluno: async (id) => {
         set({loading:true});
         try {
             await axios.delete(`${URL}/api/alunos/${id}`);
+            // Filtra o aluno deletado da lista de alunos na store
             set(prev => ({ alunos: prev.alunos.filter(aluno => aluno.id !== id)}));
             console.log("Aluno deletado com sucesso");
         } catch (error) {
             console.error("Erro ao deletar aluno:", error);
+            // Poderia adicionar um set({ error: "Mensagem de erro" }); aqui
         }finally{
             set({loading:false})
         }
     },
 
-    updateAluno: async (id) => {
-        set({loading:true});
+    // UPDATE aluno
+    updateAluno: async (id, dadosDoAluno) => { // Aceita 'id' e 'dadosDoAluno'
+        set({ loading: true });
         try {
-            const {formData} = get();
-            const response = await axios.put(`${URL}/api/alunos/${id}`, formData);
-            set({atualAluno: response.data.data});
-            await get().fetchAlunos();
-            get.resetForm();
-            console.log("Aluno atualizado com sucesso");
+            // Envia os dadosDoAluno diretamente para a API
+            const response = await axios.put(`${URL}/api/alunos/${id}`, dadosDoAluno); 
+            
+            // Atualiza o aluno atualmente selecionado na store com os dados retornados pela API
+            set({ atualAluno: response.data.data }); 
+            
+            // Re-busca a lista completa de alunos para garantir que a UI reflita a mudança
+            await get().fetchAlunos(); 
+            
+            // get.resetForm(); // <-- COMENTE OU REMOVA ESTA LINHA para que o formulário de edição não seja limpo pela store
+                               // A limpeza deve ser feita no componente `EditarNotas.js` se necessário.
+
+            console.log("Aluno atualizado com sucesso:", response.data.data);
+            return response.data.data; // Retorna os dados atualizados para o componente que chamou
         } catch (error) {
             console.error("Erro ao atualizar aluno:", error);
-        }finally{
-            set({loading:false})
+            // Relança o erro para que o componente React Native possa tratá-lo
+            throw error; 
+        } finally {
+            set({ loading: false });
         }
     },
 }));

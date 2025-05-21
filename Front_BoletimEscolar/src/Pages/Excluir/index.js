@@ -1,35 +1,65 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Modal, Image
+  View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Modal, Image, Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function ExcluirNotas({ navigation }) {
+import { useBoletim } from '../../services/api.js';  // Importando a store Zustand
+
+export default function ExcluirNotas({ navigation, route }) {
   const [menuVisible, setMenuVisible] = useState(false);
-  const [aluno, setAluno] = useState('');
-  const [notas, setNotas] = useState(['', '', '']);
+
+  const id = route.params?.id;
+
+  // Puxando funções e dados da store Zustand
+  const fetchAlunoById = useBoletim(state => state.fetchAlunoById);
+  const deleteAluno = useBoletim(state => state.deleteAluno);
+  const atualAluno = useBoletim(state => state.atualAluno);
+
   const [media, setMedia] = useState('');
-   const [url, setUrl] = useState(''); // <- novo estado
 
-  const handleNotaChange = (text, index) => {
-    const novasNotas = [...notas];
-    novasNotas[index] = text;
-    setNotas(novasNotas);
-  };
-
+  // Quando o id mudar, busca o aluno
   useEffect(() => {
-    const numeros = notas.map(n => parseFloat(n)).filter(n => !isNaN(n));
-    if (numeros.length === 3) {
-      const mediaCalculada = (numeros.reduce((acc, val) => acc + val, 0) / 3).toFixed(2);
+    if (id) {
+      fetchAlunoById(id);
+    }
+  }, [id]);
+
+// No useEffect que calcula a média:
+useEffect(() => {
+  if (atualAluno) {
+    const notas = [
+      parseFloat(atualAluno.notamat),
+      parseFloat(atualAluno.notaport),
+      parseFloat(atualAluno.notahist)
+    ].filter(n => !isNaN(n));
+
+    if (notas.length === 3) {
+      const mediaCalculada = (notas.reduce((acc, val) => acc + val, 0) / 3).toFixed(2);
       setMedia(mediaCalculada);
     } else {
       setMedia('');
     }
-  }, [notas]);
+  }
+}, [atualAluno]);
+
+
+  // Função para excluir
+  const handleExcluir = async () => {
+    if (!id) return Alert.alert('Erro', 'ID do aluno não encontrado.');
+
+    try {
+      await deleteAluno(id);
+      Alert.alert('Sucesso', 'Aluno excluído com sucesso!');
+      navigation.goBack();
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível excluir o aluno.');
+      console.error(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-
       {/* Header */}
       <View style={styles.header}>
         <Image
@@ -76,7 +106,7 @@ export default function ExcluirNotas({ navigation }) {
         <View style={styles.tableContainer}>
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
-              {['Nome', 'Matemática', 'Português', 'História', 'Média', 'URL do Aluno'].map((col, i) => (
+              {['Nome', 'Matemática', 'Português', 'História', 'Média', ].map((col, i) => (
                 <View key={i} style={styles.cell}>
                   <Text style={styles.headerText}>{col}</Text>
                 </View>
@@ -84,40 +114,43 @@ export default function ExcluirNotas({ navigation }) {
             </View>
 
             <View style={styles.row}>
-              <TextInput
-                style={styles.inputCell}
-                placeholder="Nome"
-                value={aluno}
-                onChangeText={setAluno}
-              />
-              {notas.map((nota, i) => (
-                <TextInput
-                  key={i}
-                  style={styles.inputCell}
-                  placeholder="Nota"
-                  value={nota}
-                  onChangeText={(text) => handleNotaChange(text, i)}
-                  keyboardType="numeric"
-                />
-              ))}
-              <TextInput
-                style={[styles.inputCell, { backgroundColor: '#eee' }]}
-                placeholder="Média"
-                value={media}
-                editable={false}
-              />
-                <TextInput
-                style={styles.inputCell}
-                placeholder="Url"
-                value={url}
-                onChangeText={setUrl}
-              />
+
+
+            <TextInput
+  style={styles.inputCell}
+  placeholder="Nome"
+  value={atualAluno?.nome || ''}
+  editable={false}
+/>
+
+<TextInput
+  style={styles.inputCell}
+  placeholder="Matemática"
+  value={String(atualAluno?.notamat ?? '')}
+  editable={false}
+  keyboardType="numeric"
+/>
+<TextInput
+  style={styles.inputCell}
+  placeholder="Português"
+  value={String(atualAluno?.notaport ?? '')}
+  editable={false}
+  keyboardType="numeric"
+/>
+<TextInput
+  style={styles.inputCell}
+  placeholder="História"
+  value={String(atualAluno?.notahist ?? '')}
+  editable={false}
+  keyboardType="numeric"
+/>
+
+          
             </View>
           </View>
 
-          {/* Botões dentro do tableContainer */}
           <View style={styles.botoesContainer}>
-            <TouchableOpacity style={styles.botaoExcluir}>
+            <TouchableOpacity style={styles.botaoExcluir} onPress={handleExcluir}>
               <Text style={styles.textoBotao}>Excluir</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.botaoCancelar} onPress={() => navigation.goBack()}>
@@ -127,13 +160,15 @@ export default function ExcluirNotas({ navigation }) {
         </View>
       </ScrollView>
 
-      {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>© 2025 MyGrades</Text>
       </View>
     </View>
   );
 }
+
+// ...seus estilos permanecem os mesmos
+
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#A2C8F2' },
