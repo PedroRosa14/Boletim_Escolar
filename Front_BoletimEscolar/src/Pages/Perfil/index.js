@@ -71,12 +71,7 @@ export default function Perfil({ navigation, route }) {
             <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Cadastro'); }}>
               <Text style={styles.menuItem}>Cadastrar</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Editar'); }}>
-              <Text style={styles.menuItem}>Editar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Excluir'); }}>
-              <Text style={styles.menuItem}>Excluir</Text>
-            </TouchableOpacity>
+  
           </View>
         </View>
       </Modal>

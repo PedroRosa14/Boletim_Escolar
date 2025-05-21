@@ -56,15 +56,12 @@ export default function TabelaNotas({ navigation }) {
             <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Inicio'); }}>
               <Text style={styles.menuItem}>Início</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Perfil'); }}>
-              <Text style={styles.menuItem}>Perfil</Text>
-            </TouchableOpacity>
+
             <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Cadastro'); }}>
               <Text style={styles.menuItem}>Cadastrar</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Excluir'); }}>
-              <Text style={styles.menuItem}>Excluir</Text>
-            </TouchableOpacity>
+
+           
           </View>
         </View>
       </Modal>
@@ -102,9 +99,9 @@ export default function TabelaNotas({ navigation }) {
                 </View>
                 <View style={styles.acoes}>
                   
-                <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate('Perfil', { id: aluno.id })}>
-                    <Text style={styles.iconeTexto}>✏️</Text>
-                  </TouchableOpacity>
+                <TouchableOpacity style={styles.iconeBtn} onPress={() => { setMenuVisible(false); navigation.navigate('Perfil'); }}>
+  <Text style={styles.iconeTexto}>👤</Text>
+</TouchableOpacity>
 
 
                   <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate('Editar', { id: aluno.id })}>
