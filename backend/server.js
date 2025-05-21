@@ -28,7 +28,8 @@ async function startdb() {
       notamat DECIMAL(2, 1) NOT NULL,
       notaport DECIMAL(2, 1) NOT NULL,
       notahist DECIMAL(2, 1) NOT NULL,
-      notamedia DECIMAL(2, 1) NOT NULL
+      notamedia DECIMAL(2, 1) NOT NULL,
+      url VARCHAR(255) NOT NULL
     )
     `;
 

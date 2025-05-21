@@ -18,9 +18,9 @@ export const buscarAlunos = async (req, res) => {
 };
 
 export const adicionarAluno = async (req, res) => {
-  const { nome, notamat, notaport, notahist, notamedia } = req.body;
+  const { nome, notamat, notaport, notahist, notamedia, url } = req.body;
 
-  if (!nome || !notamat || !notaport || !notahist || !notamedia) {
+  if (!nome || !notamat || !notaport || !notahist || !notamedia || !url) {
     return res
       .status(400)
       .json({ success: false, message: "Preencha todos os campos!" });
@@ -28,8 +28,8 @@ export const adicionarAluno = async (req, res) => {
 
   try {
     const novoAluno = await sql`
-        INSERT INTO alunos (nome, notamat, notaport, notahist, notamedia)
-        VALUES (${nome}, ${notamat}, ${notaport}, ${notahist}, ${notamedia})
+        INSERT INTO alunos (nome, notamat, notaport, notahist, notamedia, url)
+        VALUES (${nome}, ${notamat}, ${notaport}, ${notahist}, ${notamedia}, ${url})
         RETURNING *;
         `;
     console.log("Novo aluno adicionado:", novoAluno);
@@ -61,11 +61,11 @@ export const buscarAlunoId = async (req, res) => {
 
 export const atualizarAluno = async (req, res) => {
   const { id } = req.params;
-  const { nome, notamat, notaport, notahist, notamedia } = req.body;
+  const { nome, notamat, notaport, notahist, notamedia, url } = req.body;
 
   try {
     const alunoAtualizado = await sql`
-        UPDATE  alunos SET nome = ${nome}, notamat = ${notamat}, notaport = ${notaport}, notahist = ${notahist}, notamedia = ${notamedia}
+        UPDATE  alunos SET nome = ${nome}, notamat = ${notamat}, notaport = ${notaport}, notahist = ${notahist}, notamedia = ${notamedia}, url = ${url}
         WHERE id = ${id} 
         RETURNING *
         `;
