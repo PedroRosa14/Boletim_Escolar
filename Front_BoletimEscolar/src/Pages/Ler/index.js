@@ -1,18 +1,9 @@
-// src/pages/ler/index.js
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useBoletim } from '../../services/api.js'
-
-const alunos = [
-  { nome: 'Pedro', notas: [10, 5, 9], media: 5 },
-  { nome: 'Marcia', notas: [9, 6, 3], media: 6 },
-  { nome: 'Nicolas', notas: [7, 7, 4], media: 4 },
-  { nome: 'Roberto', notas: [4, 6, 10], media: 8 },
-  { nome: 'Leticia', notas: [7, 9, 5], media: 7 },
-];
+import { useBoletim } from '../../services/api.js'; // seu hook que chama a API
 
 // Emotes locais
 const emotes = {
@@ -27,21 +18,13 @@ function getEmote(media) {
   return emotes.triste;
 }
 
-  export default function TabelaNotas({ navigation }) {
-    const [menuVisible, setMenuVisible] = useState(false);
-    const { alunos, loading, error, fetchAlunos, deleteAluno } = useBoletim();
-  
-    //teste get
-    //useEffect(() =>{
-    //fetchAlunos()
-    //},[fetchAlunos]);
-    //console.log("alunos", alunos);
+export default function TabelaNotas({ navigation }) {
+  const [menuVisible, setMenuVisible] = useState(false);
+  const { alunos, loading, error, fetchAlunos } = useBoletim();
 
-    //teste delete
-      //useEffect(() =>{
-      //deleteAluno()
-      //},[deleteAluno]);
-    //console.log("aluno deletado"); 
+  useEffect(() => {
+    fetchAlunos();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -79,15 +62,16 @@ function getEmote(media) {
             <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Cadastro'); }}>
               <Text style={styles.menuItem}>Cadastrar</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Editar'); }}>
-              <Text style={styles.menuItem}>Editar</Text>
-            </TouchableOpacity>
             <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Excluir'); }}>
               <Text style={styles.menuItem}>Excluir</Text>
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
+
+      {/* Loading e Erro */}
+      {loading && <Text style={{ textAlign: 'center', marginVertical: 10 }}>Carregando...</Text>}
+      {error && <Text style={{ textAlign: 'center', marginVertical: 10, color: 'red' }}>{error}</Text>}
 
       {/* Tabela */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -98,21 +82,29 @@ function getEmote(media) {
                 <Text key={i} style={[styles.cell, styles.headerText]}>{col}</Text>
               ))}
             </View>
+
+            {/* Renderiza alunos da API */}
+            {alunos.length === 0 && !loading && (
+              <View style={styles.row}>
+                <Text style={[styles.cell, { textAlign: 'center' }]} >Nenhum aluno encontrado.</Text>
+              </View>
+            )}
+
             {alunos.map((aluno, i) => (
               <View key={i} style={styles.row}>
                 <Text style={styles.cell}>{aluno.nome}</Text>
-                {aluno.notas.map((nota, j) => (
-                  <Text key={j} style={styles.cell}>{nota}</Text>
-                ))}
-                <Text style={styles.cell}>{aluno.media}</Text>
+                <Text style={styles.cell}>{aluno.notamat}</Text>
+                <Text style={styles.cell}>{aluno.notaport}</Text>
+                <Text style={styles.cell}>{aluno.notahist}</Text>
+                <Text style={styles.cell}>{aluno.notamedia}</Text>
                 <View style={[styles.cell, styles.emoteCell]}>
-                  <Image source={getEmote(aluno.media)} style={styles.emote} />
+                  <Image source={getEmote(Number(aluno.notamedia))} style={styles.emote} />
                 </View>
                 <View style={styles.acoes}>
-                  <TouchableOpacity style={styles.iconeBtn}>
+                  <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate('Editar', { id: aluno.id })}>
                     <Text style={styles.iconeTexto}>✏️</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.iconeBtn}>
+                  <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate(`Excluir`, { id: aluno.id })}>
                     <Text style={styles.iconeTexto}>🗑️</Text>
                   </TouchableOpacity>
                 </View>

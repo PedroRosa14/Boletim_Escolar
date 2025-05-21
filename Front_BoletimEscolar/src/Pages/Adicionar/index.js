@@ -1,32 +1,61 @@
 // src/pages/adicionar/index.js
 import React, { useState, useEffect } from 'react';
-import {
-  View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Modal, Image
-} from 'react-native';
+import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Modal, Image, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function Adicionar({ navigation }) {
+export default function CadastrarAluno({ navigation }) {
   const [menuVisible, setMenuVisible] = useState(false);
-  const [aluno, setAluno] = useState('');
-  const [notas, setNotas] = useState(['', '', '']);
+  const [nome, setNome] = useState('');
+  const [notamat, setNotamat] = useState('');
+  const [notaport, setNotaport] = useState('');
+  const [notahist, setNotahist] = useState('');
   const [media, setMedia] = useState('');
-  const [url, setUrl] = useState(''); // <- novo estado
-
-  const handleNotaChange = (text, index) => {
-    const novasNotas = [...notas];
-    novasNotas[index] = text;
-    setNotas(novasNotas);
-  };
 
   useEffect(() => {
-    const numeros = notas.map(n => parseFloat(n)).filter(n => !isNaN(n));
-    if (numeros.length === 3) {
-      const mediaCalculada = (numeros.reduce((acc, val) => acc + val, 0) / 3).toFixed(2);
-      setMedia(mediaCalculada);
+    // calcula média se as notas forem válidas
+    const notas = [notamat, notaport, notahist].map(n => parseFloat(n)).filter(n => !isNaN(n));
+    if (notas.length === 3) {
+      const m = (notas.reduce((acc, val) => acc + val, 0) / 3).toFixed(1);
+      setMedia(m);
     } else {
       setMedia('');
     }
-  }, [notas]);
+  }, [notamat, notaport, notahist]);
+
+  const handleSubmit = async () => {
+    if (!nome || !notamat || !notaport || !notahist) {
+      Alert.alert('Erro', 'Preencha todos os campos!');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3000/api/alunos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome,
+          notamat: parseFloat(notamat),
+          notaport: parseFloat(notaport),
+          notahist: parseFloat(notahist),
+          notamedia: parseFloat(media),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert('Sucesso', 'Aluno cadastrado com sucesso!');
+        navigation.goBack();
+      } else {
+        Alert.alert('Erro', data.message || 'Erro ao cadastrar aluno');
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Erro ao conectar com o servidor');
+      console.error(error);
+    }
+  };
+
+
 
   return (
     <View style={styles.container}>
@@ -73,7 +102,7 @@ export default function Adicionar({ navigation }) {
         <View style={styles.tableContainer}>
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
-              {['Nome', 'Matemática', 'Português', 'História', 'Média', 'URL do Aluno'].map((col, i) => (
+              {['Nome', 'Matemática', 'Português', 'História', 'Média'].map((col, i) => (
                 <View key={i} style={styles.cell}>
                   <Text style={styles.headerText}>{col}</Text>
                 </View>
@@ -81,40 +110,47 @@ export default function Adicionar({ navigation }) {
             </View>
 
             <View style={styles.row}>
-              <TextInput
-                style={styles.inputCell}
-                placeholder="Nome"
-                value={aluno}
-                onChangeText={setAluno}
-              />
-              {notas.map((nota, i) => (
-                <TextInput
-                  key={i}
-                  style={styles.inputCell}
-                  placeholder="Nota"
-                  value={nota}
-                  onChangeText={(text) => handleNotaChange(text, i)}
-                  keyboardType="numeric"
-                />
-              ))}
-              <TextInput
-                style={[styles.inputCell, { backgroundColor: '#eee' }]}
-                placeholder="Média"
-                value={media}
-                editable={false}
-              />
-              <TextInput
-                style={styles.inputCell}
-                placeholder="Url"
-                value={url}
-                onChangeText={setUrl}
-              />
+            <TextInput
+        style={styles.inputCell}
+        placeholder="Nome"
+        value={nome}
+        onChangeText={setNome}
+      />
+      <TextInput
+        style={styles.inputCell}
+        placeholder="Nota Matemática"
+        keyboardType="numeric"
+        value={notamat}
+        onChangeText={setNotamat}
+      />
+      <TextInput
+        style={styles.inputCell}
+        placeholder="Nota Português"
+        keyboardType="numeric"
+        value={notaport}
+        onChangeText={setNotaport}
+      />
+      <TextInput
+        style={styles.inputCell}
+        placeholder="Nota História"
+        keyboardType="numeric"
+        value={notahist}
+        onChangeText={setNotahist}
+      />
+
+      <TextInput
+        style={[styles.inputCell, { backgroundColor: '#eee' }]}
+        placeholder="Média"
+        editable={false}
+        value={media}
+      />
             </View>
           </View>
 
-          <TouchableOpacity style={styles.botaoAdicionar}>
-            <Text style={styles.textoBotao}>Salvar</Text>
-          </TouchableOpacity>
+          
+<TouchableOpacity style={styles.botaoAdicionar} onPress={handleSubmit}>
+  <Text style={styles.textoBotao}>Salvar</Text>
+</TouchableOpacity>
         </View>
       </ScrollView>
 

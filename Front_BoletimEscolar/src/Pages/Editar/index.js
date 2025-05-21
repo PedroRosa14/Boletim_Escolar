@@ -1,84 +1,138 @@
-// src/pages/editar/index.js
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Modal,Image
+  View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Modal, Image, Alert
 } from 'react-native';
+
 import { Ionicons } from '@expo/vector-icons';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { useBoletim } from '../../services/api.js'; // seu hook que chama a API
 
-export default function EditarNotas({ navigation }) {
+export default function Editar() {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { id } = route.params || {};
+
   const [menuVisible, setMenuVisible] = useState(false);
-  const [aluno, setAluno] = useState('João da Silva'); // exemplo de valor carregado
-  const [notas, setNotas] = useState(['7.5', '8.0', '6.5']);
-  const [media, setMedia] = useState('');
-   const [url, setUrl] = useState(''); // <- novo estado
+  const [nome, setNome] = useState('');
+  const [notamat, setNotaMat] = useState('');
+  const [notaport, setNotaPort] = useState('');
+  const [notahist, setNotaHist] = useState('');
 
-  const handleNotaChange = (text, index) => {
-    const novasNotas = [...notas];
-    novasNotas[index] = text;
-    setNotas(novasNotas);
+  const { atualAluno, fetchAlunoById, loading, error, updateFormData, updateAluno } = useBoletim();
+
+  // Busca aluno ao carregar a tela
+  useEffect(() => {
+    if (id) {
+      fetchAlunoById(id);
+    }
+  }, [id]);
+
+  // Preenche campos ao mudar o aluno atual
+  useEffect(() => {
+    if (atualAluno) {
+      setNome(atualAluno.nome || '');
+      setNotaMat(String(atualAluno.notamat ?? ''));
+      setNotaPort(String(atualAluno.notaport ?? ''));
+      setNotaHist(String(atualAluno.notahist ?? ''));
+    }
+  }, [atualAluno]);
+
+  const calcularMedia = () => {
+    const m = (parseFloat(notamat) + parseFloat(notaport) + parseFloat(notahist)) / 3;
+    return isNaN(m) ? '' : m.toFixed(2);
   };
 
-  useEffect(() => {
-    const numeros = notas.map(n => parseFloat(n)).filter(n => !isNaN(n));
-    if (numeros.length === 3) {
-      const mediaCalculada = (numeros.reduce((acc, val) => acc + val, 0) / 3).toFixed(2);
-      setMedia(mediaCalculada);
-    } else {
-      setMedia('');
+  const handleEditar = async () => {
+    if (!nome || !notamat || !notaport || !notahist) {
+      Alert.alert('Preencha todos os campos');
+      return;
     }
-  }, [notas]);
+
+    const novoAluno = {
+      nome,
+      notamat: parseFloat(notamat),
+      notaport: parseFloat(notaport),
+      notahist: parseFloat(notahist),
+    };
+
+    try {
+      await updateFormData(novoAluno);
+      await updateAluno(id);
+
+      Alert.alert('Dados atualizados com sucesso!');
+      navigation.goBack();
+
+    } catch (error) {
+      console.error('Erro ao atualizar aluno:', error);
+      Alert.alert('Erro ao salvar alterações');
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={[styles.container, {justifyContent: 'center', alignItems: 'center'}]}>
+        <Text style={{fontSize: 18, color: '#333'}}>Carregando dados do aluno...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={[styles.container, {justifyContent: 'center', alignItems: 'center'}]}>
+        <Text style={{fontSize: 18, color: 'red'}}>{error}</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      
-        {/* Header */}
-           <View style={styles.header}>
-           <Image
-             source={require('../../../assets/mygrades_semfundo.png')}
-             style={styles.logo}
-             resizeMode="contain"
-           />
-           <TouchableOpacity onPress={() => setMenuVisible(true)} style={styles.menuIcon}>
-             <Ionicons name="menu" size={32} color="#fff" />
-           </TouchableOpacity>
-         </View>
+      {/* Header */}
+      <View style={styles.header}>
+        <Image
+          source={require('../../../assets/mygrades_semfundo.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+        <TouchableOpacity onPress={() => setMenuVisible(true)} style={styles.menuIcon}>
+          <Ionicons name="menu" size={32} color="#fff" />
+        </TouchableOpacity>
+      </View>
 
-     {/* Modal lateral */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={menuVisible}
-            onRequestClose={() => setMenuVisible(false)}
-          >
-            <View style={styles.modalOverlay}>
-              <View style={styles.modalMenu}>
-                <TouchableOpacity onPress={() => setMenuVisible(false)} style={styles.closeButton}>
-                  <Ionicons name="close" size={28} color="#fff" />
-                </TouchableOpacity>
-    
-                <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Inicio'); }}>
-                  <Text style={styles.menuItem}>Início</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Cadastro'); }}>
-                  <Text style={styles.menuItem}>Cadastrar</Text>
-                </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Editar'); }}>
-                   <Text style={styles.menuItem}>Editar</Text>
-                     </TouchableOpacity>
-                            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Excluir'); }}>
-                              <Text style={styles.menuItem}>Excluir</Text>
-                            </TouchableOpacity>
-    
-              </View>
-            </View>
-          </Modal>
+      {/* Modal lateral */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={menuVisible}
+        onRequestClose={() => setMenuVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalMenu}>
+            <TouchableOpacity onPress={() => setMenuVisible(false)} style={styles.closeButton}>
+              <Ionicons name="close" size={28} color="#fff" />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Inicio'); }}>
+              <Text style={styles.menuItem}>Início</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Cadastro'); }}>
+              <Text style={styles.menuItem}>Cadastrar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Editar'); }}>
+              <Text style={styles.menuItem}>Editar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Excluir'); }}>
+              <Text style={styles.menuItem}>Excluir</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* Tabela de edição */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View style={styles.tableContainer}>
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
-              {['Nome', 'Matemática', 'Português', 'História', 'Média', 'URL do Aluno'].map((col, i) => (
+              {['Nome', 'Matemática', 'Português', 'História', 'Média'].map((col, i) => (
                 <View key={i} style={styles.cell}>
                   <Text style={styles.headerText}>{col}</Text>
                 </View>
@@ -89,38 +143,43 @@ export default function EditarNotas({ navigation }) {
               <TextInput
                 style={styles.inputCell}
                 placeholder="Nome"
-                value={aluno}
-                onChangeText={setAluno}
+                value={nome}
+                onChangeText={setNome}
               />
-              {notas.map((nota, i) => (
-                <TextInput
-                  key={i}
-                  style={styles.inputCell}
-                  placeholder="Nota"
-                  value={nota}
-                  onChangeText={(text) => handleNotaChange(text, i)}
-                  keyboardType="numeric"
-                />
-              ))}
+              <TextInput
+                style={styles.inputCell}
+                placeholder="Matemática"
+                value={notamat}
+                onChangeText={setNotaMat}
+                keyboardType="numeric"
+              />
+              <TextInput
+                style={styles.inputCell}
+                placeholder="Português"
+                value={notaport}
+                onChangeText={setNotaPort}
+                keyboardType="numeric"
+              />
+              <TextInput
+                style={styles.inputCell}
+                placeholder="História"
+                value={notahist}
+                onChangeText={setNotaHist}
+                keyboardType="numeric"
+              />
               <TextInput
                 style={[styles.inputCell, { backgroundColor: '#eee' }]}
                 placeholder="Média"
-                value={media}
+                value={calcularMedia()}
                 editable={false}
-              />
-                <TextInput
-                style={styles.inputCell}
-                placeholder="Url"
-                value={url}
-                onChangeText={setUrl}
               />
             </View>
           </View>
 
           {/* Botões Editar e Cancelar */}
           <View style={styles.botoesContainer}>
-            <TouchableOpacity style={styles.botaoEditar}>
-              <Text style={styles.textoBotao}>Editar</Text>
+            <TouchableOpacity style={styles.botaoEditar} onPress={handleEditar}>
+              <Text style={styles.textoBotao}>Salvar</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.botaoCancelar} onPress={() => navigation.goBack()}>
               <Text style={styles.textoBotao}>Cancelar</Text>
@@ -144,24 +203,22 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     alignSelf: 'center',
-    marginTop: -20, // Ajuste para encaixar bem visualmente
+    marginTop: -20,
   },
-  
+
   menuIcon: {
     position: 'absolute',
     right: 20,
     top: 20,
   },
-  
+
   header: {
-    height: 80, // aumente para acomodar o logo
+    height: 80,
     backgroundColor: '#2980b9',
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 20,
   },
-  
-
 
   modalOverlay: {
     flex: 1,
