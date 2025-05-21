@@ -11,9 +11,13 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT;
+const cors = require('cors');
+app.use(cors({
+    origin: 'https://your-frontend.vercel.app', // Allow only your frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
 
 app.use(express.json());                       
-app.use(cors());
 app.use(helmet()); 
 app.use(morgan("dev"));
 
@@ -29,7 +33,7 @@ async function startdb() {
       notaport DECIMAL(2, 1) NOT NULL,
       notahist DECIMAL(2, 1) NOT NULL,
       notamedia DECIMAL(2, 1) NOT NULL,
-      url VARCHAR(255) 
+      url VARCHAR(255)
     )
     `;
 
