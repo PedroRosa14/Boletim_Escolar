@@ -15,10 +15,11 @@ export const useBoletim = create((set , get) => ({
         notaport:"",
         notahist:"",
         notamedia:"",
+        url:""
     },
 
     setFormData: (formData) => set({formData}),
-    resetForm: () => set({ formData: {nome: "", notamat:"", notaport:"", notahist:"", notamedia:"" }}),
+    resetForm: () => set({ formData: {nome: "", notamat:"", notaport:"", notahist:"", notamedia:"", url:"" }}),
 
     addAluno: async (e) => {
         e.preventDefault();
