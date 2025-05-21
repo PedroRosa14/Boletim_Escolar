@@ -20,7 +20,7 @@ export const buscarAlunos = async (req, res) => {
 export const adicionarAluno = async (req, res) => {
   const { nome, notamat, notaport, notahist, notamedia, url } = req.body;
 
-  if (!nome || !notamat || !notaport || !notahist || !notamedia || !url) {
+  if (!nome || !notamat || !notaport || !notahist || !notamedia) {
     return res
       .status(400)
       .json({ success: false, message: "Preencha todos os campos!" });
