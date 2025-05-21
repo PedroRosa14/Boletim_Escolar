@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import axios from 'axios';
 
-const URL = "http://localhost:3000"; // Certifique-se que esta URL está correta para seu ambiente
+const URL = process.env.NODE_PUBLIC_API_URL;
 
 export const useBoletim = create((set , get) => ({
     alunos:[],
