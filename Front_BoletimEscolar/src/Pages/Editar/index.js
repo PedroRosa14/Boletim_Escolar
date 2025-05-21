@@ -21,6 +21,7 @@ export default function EditarNotas({ navigation, route }) {
   const [notamat, setNotamat] = useState('');
   const [notaport, setNotaport] = useState('');
   const [notahist, setNotahist] = useState('');
+    const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Puxar aluno ao abrir a tela
@@ -37,6 +38,7 @@ export default function EditarNotas({ navigation, route }) {
       setNotamat(String(atualAluno.notamat ?? ''));
       setNotaport(String(atualAluno.notaport ?? ''));
       setNotahist(String(atualAluno.notahist ?? ''));
+      setUrl(String(atualAluno.url ?? ''));
     }
   }, [atualAluno]);
 
@@ -55,7 +57,7 @@ export default function EditarNotas({ navigation, route }) {
   };
 
   const handleSalvar = async () => {
-        if (!nome.trim() || !notamat || !notaport || !notahist) {
+        if (!nome.trim() || !notamat || !notaport || !notahist  || !url.trim()) {
           return Alert.alert('Atenção', 'Preencha todos os campos');
         }
     
@@ -66,6 +68,7 @@ export default function EditarNotas({ navigation, route }) {
           notamat: parseFloat(notamat),
           notaport: parseFloat(notaport),
           notahist: parseFloat(notahist),
+          url: url.trim(),
           notamedia: parseFloat(calcularMedia()),
         };
     
@@ -129,7 +132,7 @@ export default function EditarNotas({ navigation, route }) {
         <View style={styles.tableContainer}>
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
-              {['Nome', 'Matemática', 'Português', 'História', 'Média'].map((col, i) => (
+              {['Nome', 'Matemática', 'Português', 'História','URL' ,'Média'].map((col, i) => (
                 <View key={i} style={styles.cell}>
                   <Text style={styles.headerText}>{col}</Text>
                 </View>
@@ -164,6 +167,14 @@ export default function EditarNotas({ navigation, route }) {
                 onChangeText={setNotahist}
                 keyboardType="numeric"
               />
+
+              <TextInput
+                style={styles.inputCell}
+                placeholder="URL da imagem"
+                value={url}
+                onChangeText={setUrl}
+              />
+
               <View style={[styles.inputCell, { justifyContent: 'center', alignItems: 'center' }]}>
                 <Text>{calcularMedia()}</Text>
               </View>

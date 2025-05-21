@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View, Text, StyleSheet, Image, TouchableOpacity, Modal,
+  View, Text, StyleSheet, Image, TouchableOpacity, Modal, ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useBoletim } from '../../services/api.js';  // sua store Zustand
 
 const emotes = {
   feliz: require('../../../assets/img_emojifeliz.png'),
@@ -16,14 +17,27 @@ const getEmote = (media) => {
   return emotes.triste;
 };
 
-export default function Perfil({ navigation }) {
+export default function Perfil({ navigation, route }) {
+  const { fetchAlunoById, atualAluno, loading } = useBoletim();
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const aluno = {
-    nome: 'Pedro',
-    media: 7,
-    foto: require('../../../assets/favicon.png'), // Substitua pelo caminho real da imagem
-  };
+  const alunoId = route?.params?.id; // recebe id passado na navegação
+
+  useEffect(() => {
+    if (alunoId) {
+      fetchAlunoById(alunoId);
+    }
+  }, [alunoId]);
+
+  if (loading || !atualAluno) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
+  }
+
+  const emote = getEmote(atualAluno.notamedia);
 
   return (
     <View style={styles.container}>
@@ -69,12 +83,12 @@ export default function Perfil({ navigation }) {
 
       {/* Conteúdo do perfil */}
       <View style={styles.card}>
-        <Image source={aluno.foto} style={styles.profileImage} />
-        <Text style={styles.label}>Nome : <Text style={styles.value}>{aluno.nome}</Text></Text>
-        <Text style={styles.label}>Média : <Text style={styles.value}>{aluno.media}</Text></Text>
+        <Image source={{ uri: atualAluno.url }} style={styles.profileImage} />
+        <Text style={styles.label}>Nome : <Text style={styles.value}>{atualAluno.nome}</Text></Text>
+        <Text style={styles.label}>Média : <Text style={styles.value}>{atualAluno.notamedia}</Text></Text>
         <View style={styles.satisfacaoRow}>
           <Text style={styles.label}>Satisfação : </Text>
-          <Image source={getEmote(aluno.media)} style={styles.emote} />
+          <Image source={emote} style={styles.emote} />
         </View>
       </View>
 
@@ -146,6 +160,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 45,
     marginBottom: 15,
+    backgroundColor: '#fff',
   },
   label: {
     fontSize: 16,

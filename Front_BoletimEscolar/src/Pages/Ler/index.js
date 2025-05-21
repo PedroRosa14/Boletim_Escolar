@@ -101,9 +101,16 @@ export default function TabelaNotas({ navigation }) {
                   <Image source={getEmote(Number(aluno.notamedia))} style={styles.emote} />
                 </View>
                 <View style={styles.acoes}>
+                  
+                <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate('Perfil', { id: aluno.id })}>
+                    <Text style={styles.iconeTexto}>✏️</Text>
+                  </TouchableOpacity>
+
+
                   <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate('Editar', { id: aluno.id })}>
                     <Text style={styles.iconeTexto}>✏️</Text>
                   </TouchableOpacity>
+
                   <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate(`Excluir`, { id: aluno.id })}>
                     <Text style={styles.iconeTexto}>🗑️</Text>
                   </TouchableOpacity>

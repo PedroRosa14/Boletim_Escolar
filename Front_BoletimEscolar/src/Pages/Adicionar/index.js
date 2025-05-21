@@ -10,6 +10,7 @@ export default function CadastrarAluno({ navigation }) {
   const [notaport, setNotaport] = useState('');
   const [notahist, setNotahist] = useState('');
   const [media, setMedia] = useState('');
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
     // calcula média se as notas forem válidas
@@ -23,7 +24,7 @@ export default function CadastrarAluno({ navigation }) {
   }, [notamat, notaport, notahist]);
 
   const handleSubmit = async () => {
-    if (!nome || !notamat || !notaport || !notahist) {
+    if (!nome || !notamat || !notaport || !notahist || !url) {
       Alert.alert('Erro', 'Preencha todos os campos!');
       return;
     }
@@ -38,6 +39,7 @@ export default function CadastrarAluno({ navigation }) {
           notaport: parseFloat(notaport),
           notahist: parseFloat(notahist),
           notamedia: parseFloat(media),
+          url,  // <-- Adiciona o campo URL aqui
         }),
       });
 
@@ -102,7 +104,7 @@ export default function CadastrarAluno({ navigation }) {
         <View style={styles.tableContainer}>
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
-              {['Nome', 'Matemática', 'Português', 'História', 'Média'].map((col, i) => (
+              {['Nome', 'Matemática', 'Português', 'História','URL', 'Média'].map((col, i) => (
                 <View key={i} style={styles.cell}>
                   <Text style={styles.headerText}>{col}</Text>
                 </View>
@@ -137,6 +139,13 @@ export default function CadastrarAluno({ navigation }) {
         value={notahist}
         onChangeText={setNotahist}
       />
+
+<TextInput
+  style={styles.inputCell}
+  placeholder="URL da imagem"
+  value={url}
+  onChangeText={setUrl}
+/>
 
       <TextInput
         style={[styles.inputCell, { backgroundColor: '#eee' }]}
