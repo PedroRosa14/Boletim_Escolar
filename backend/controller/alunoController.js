@@ -44,11 +44,25 @@ export const adicionarAluno = async (req, res) => {
 
 export const buscarAlunoId = async (req, res) => {
   const { id } = req.params;
+  const idNumerico = parseInt(id, 10);
+
+  if (isNaN(idNumerico)) {
+    return res.status(400).json({
+      success: false,
+      message: "O ID do aluno deve ser um número inteiro válido.",
+    });
+  }
 
   try {
     const aluno = await sql`
-        SELECT * FROM alunos WHERE id =${id}
-        `;
+      SELECT * FROM alunos WHERE id = ${idNumerico}
+    `;
+
+    if (aluno.length === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Aluno não encontrado" });
+    }
 
     res.status(200).json({ success: true, data: aluno[0] });
   } catch (error) {
@@ -58,7 +72,6 @@ export const buscarAlunoId = async (req, res) => {
       .json({ success: false, message: "Erro interno no servidor" });
   }
 };
-
 export const atualizarAluno = async (req, res) => {
   const { id } = req.params;
   const { nome, notamat, notaport, notahist, notamedia, url } = req.body;
