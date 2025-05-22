@@ -3,7 +3,7 @@ import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useBoletim } from '../../services/api.js'; // seu hook que chama a API
+import { useBoletim } from '../../services/api.js'; 
 
 // Emotes locais
 const emotes = {
@@ -106,6 +106,7 @@ export default function TabelaNotas({ navigation }) {
 
                   <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate('Editar', { id: aluno.id })}>
                     <Text style={styles.iconeTexto}>✏️</Text>
+                    console.log("ID do aluno:", aluno.id, typeof aluno.id);
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate(`Excluir`, { id: aluno.id })}>

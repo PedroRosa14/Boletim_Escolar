@@ -30,7 +30,7 @@ export default function CadastrarAluno({ navigation }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/alunos', {
+      const response = await fetch('https://boletim-escolar-api.onrender.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
