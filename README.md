@@ -1,32 +1,90 @@
-# Boletim Escolar
+📚 Boletim Escolar
+Aplicativo mobile para cadastro, consulta, edição e exclusão de alunos e suas notas escolares.
 
-Aplicação mobile para cadastro, consulta, edição e exclusão de alunos e suas notas escolares.
 
-## Funcionalidades
+✨ Funcionalidades
+Cadastro de alunos com nome, notas de Matemática, Português, História, média e foto (URL).
 
-- Cadastro de alunos com nome, notas de Matemática, Português, História, média e foto (URL).
-- Listagem de todos os alunos cadastrados.
-- Visualização do perfil do aluno, incluindo média e emoji de satisfação.
-- Edição dos dados e notas do aluno.
-- Exclusão de alunos.
-- Interface amigável e responsiva.
+Listagem de todos os alunos cadastrados.
 
-## Tecnologias Utilizadas
+Visualização do perfil do aluno, incluindo média e emoji de satisfação.
 
-- **Frontend:** React Native (Expo), Zustand, Axios, React Navigation
-- **Backend:** Node.js, Express, PostgreSQL (Neon Database), @neondatabase/serverless
-- **Outros:** Helmet, Morgan, CORS, dotenv
+Edição dos dados e notas do aluno.
 
-## Como rodar o projeto
+Exclusão de alunos.
 
-##Frontend
-Acesse a pasta Front_BoletimEscolar:
-cd Front_BoletimEscolar
+Interface amigável e responsiva.
 
-Instale as dependências:
+🛠️ Tecnologias Utilizadas
+Frontend:
+
+React Native (Expo)
+
+Zustand
+
+Axios
+
+React Navigation
+
+Backend:
+
+Node.js
+
+Express
+
+PostgreSQL (Neon Database)
+
+@neondatabase/serverless
+
+Outros:
+
+Helmet
+
+Morgan
+
+🚀 Como Rodar o Projeto
+Pré-requisitos
+Node.js instalado
+
+Expo CLI instalado globalmente
+
+PostgreSQL configurado (utilizando Neon Database)
+
+Backend
+bash
+Copiar
+Editar
+# Navegue até a pasta do backend
+cd backend
+
+# Instale as dependências
 npm install
 
-Inicie o app:
+# Inicie o servidor
+npm start
+Frontend
+bash
+Copiar
+Editar
+# Navegue até a pasta do frontend
+cd Front_BoletimEscolar
+
+# Instale as dependências
+npm install
+
+# Inicie o aplicativo
 npm start
 
-Use o Expo Go no celular ou emulador para visualizar o app.
+🔗 [Link da nossa API](https://boletim-escolar-api.onrender.com/)
+
+🤝 Contribuições
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull requests.
+
+📄 Licença
+Este projeto está sob a licença MIT. Consulte o arquivo LICENSE para mais detalhes.
+
+📬 Contato
+Pedro F - @PedroRosa14
+Kauã L - @Kaualuiz12
+Igor - @Igolwb
+Elias - @EliasdeAlencar
