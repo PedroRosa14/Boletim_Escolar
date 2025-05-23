@@ -100,7 +100,7 @@ useEffect(() => {
         <View style={styles.tableContainer}>
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
-              {['Nome', 'Matemática', 'Português', 'História', 'Média', ].map((col, i) => (
+              {['Nome', 'Matemática', 'Português', 'História', ].map((col, i) => (
                 <View key={i} style={styles.cell}>
                   <Text style={styles.headerText}>{col}</Text>
                 </View>

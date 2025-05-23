@@ -28,7 +28,7 @@ export const useBoletim = create((set , get) => ({
         try {
             const {formData} = get();
             console.log("URL da requisição GET:", `${URL}/`);
-            await axios.post(`${URL}/api/alunos`, formData);
+            await axios.post(`${URL}/`, formData);
             await get().fetchAlunos();
             get().resetForm(); // Aqui o resetForm faz sentido para limpar o formulário de adição
             console.log("Aluno adicionado com sucesso");
