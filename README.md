@@ -59,29 +59,29 @@ Ele permite gerenciar alunos, cadastrar notas, calcular médias e exibir emojis 
 ### 📂 Backend
 
 
-# Acesse a pasta do backend
-cd backend
+### Acesse a pasta do backend
+- cd backend
 
-# Instale as dependências
-npm install
+### Instale as dependências
+- npm install
 
-# Configure o arquivo .env com as credenciais do Neon Database
+### Configure o arquivo .env com as credenciais do Neon Database
 
-# Inicie o servidor
-npm start
+### Inicie o servidor
+- npm start
 
 ---
 
 ## 📱 Frontend
 
-# Acesse a pasta do frontend
-cd Front_BoletimEscolar
+### Acesse a pasta do frontend
+- cd Front_BoletimEscolar
 
-# Instale as dependências
-npm install
+### Instale as dependências
+- npm install
 
-# Inicie o aplicativo
-npm start
+### Inicie o aplicativo
+- npm start
 
 Utilize o aplicativo no emulador ou no seu dispositivo móvel através do Expo Go.
 
