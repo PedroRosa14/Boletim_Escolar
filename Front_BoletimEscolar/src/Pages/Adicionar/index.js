@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Modal, Image, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+
 export default function CadastrarAluno({ navigation }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const [nome, setNome] = useState('');
@@ -11,6 +12,8 @@ export default function CadastrarAluno({ navigation }) {
   const [notahist, setNotahist] = useState('');
   const [media, setMedia] = useState('');
   const [url, setUrl] = useState('');
+
+  
 
   useEffect(() => {
     // calcula média se as notas forem válidas

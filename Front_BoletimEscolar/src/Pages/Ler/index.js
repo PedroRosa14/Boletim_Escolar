@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Image,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useBoletim } from '../../services/api.js'; 
+import { useBoletim } from '../../services/api.js';
+import { useFocusEffect } from '@react-navigation/native';
 
 // Emotes locais
 const emotes = {
@@ -18,13 +19,22 @@ function getEmote(media) {
   return emotes.triste;
 }
 
-export default function TabelaNotas({ navigation }) {
+export default function TabelaNotas({ navigation, route }) {
   const [menuVisible, setMenuVisible] = useState(false);
   const { alunos, loading, error, fetchAlunos } = useBoletim();
 
-  useEffect(() => {
+  const reloadAlunos = useCallback(() => {
     fetchAlunos();
-  }, []);
+  }, [fetchAlunos]);
+
+  useFocusEffect(
+    useCallback(() => {
+      reloadAlunos();
+      if (route.params?.refresh) {
+        navigation.setParams({ refresh: false });
+      }
+    }, [reloadAlunos, route.params?.refresh, navigation])
+  );
 
   return (
     <View style={styles.container}>
@@ -60,8 +70,6 @@ export default function TabelaNotas({ navigation }) {
             <TouchableOpacity onPress={() => { setMenuVisible(false); navigation.navigate('Cadastro'); }}>
               <Text style={styles.menuItem}>Cadastrar</Text>
             </TouchableOpacity>
-
-           
           </View>
         </View>
       </Modal>
@@ -98,17 +106,15 @@ export default function TabelaNotas({ navigation }) {
                   <Image source={getEmote(Number(aluno.notamedia))} style={styles.emote} />
                 </View>
                 <View style={styles.acoes}>
-                  
-                <TouchableOpacity style={styles.iconeBtn} onPress={() => { setMenuVisible(false); navigation.navigate('Perfil'); }}>
-  <Text style={styles.iconeTexto}>👤</Text>
-</TouchableOpacity>
-
-
-                  <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate('Editar', { id: aluno.id })}>
-                    <Text style={styles.iconeTexto}>✏️</Text>
-                    console.log("ID do aluno:", aluno.id, typeof aluno.id);
+                  <TouchableOpacity style={styles.iconeBtn} onPress={() => { setMenuVisible(false); navigation.navigate('Perfil', { id: aluno.id }); }}>
+                    <Text style={styles.iconeTexto}>👤</Text>
                   </TouchableOpacity>
-
+                  <TouchableOpacity style={styles.iconeBtn} onPress={() => {
+                    console.log("ID do aluno:", aluno.id, typeof aluno.id);
+                    navigation.navigate('Editar', { id: aluno.id });
+                  }}>
+                    <Text style={styles.iconeTexto}>✏️</Text>
+                  </TouchableOpacity>
                   <TouchableOpacity style={styles.iconeBtn} onPress={() => navigation.navigate(`Excluir`, { id: aluno.id })}>
                     <Text style={styles.iconeTexto}>🗑️</Text>
                   </TouchableOpacity>
@@ -133,20 +139,17 @@ export default function TabelaNotas({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#A2C8F2' },
-
   logo: {
     width: 100,
     height: 100,
     alignSelf: 'center',
     marginTop: -20,
   },
-
   menuIcon: {
     position: 'absolute',
     right: 20,
     top: 20,
   },
-
   header: {
     height: 80,
     backgroundColor: '#2980b9',
@@ -154,7 +157,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 20,
   },
-
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -174,7 +176,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginVertical: 10,
   },
-
   tableContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -246,7 +247,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
-
   footer: {
     backgroundColor: '#2980b9',
     paddingVertical: 30,
