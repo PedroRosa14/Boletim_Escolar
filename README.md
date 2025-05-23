@@ -84,7 +84,9 @@ npm install
 
 npm start
 
+
 ### Frontend
+-Frontend
 
 
 1. Navegue até a pasta Front_BoletimEscolar `Front_BoletimEscolar`:
