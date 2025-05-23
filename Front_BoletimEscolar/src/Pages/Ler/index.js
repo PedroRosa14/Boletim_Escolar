@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   View, Text, ScrollView, StyleSheet, TouchableOpacity, Modal, Image,
+  RefreshControl // Importe o RefreshControl
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useBoletim } from '../../services/api.js';
@@ -21,10 +22,13 @@ function getEmote(media) {
 
 export default function TabelaNotas({ navigation, route }) {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [refreshing, setRefreshing] = useState(false); // Estado para controle de refresh
   const { alunos, loading, error, fetchAlunos } = useBoletim();
 
   const reloadAlunos = useCallback(() => {
-    fetchAlunos();
+    setRefreshing(true);
+    fetchAlunos()
+      .finally(() => setRefreshing(false));
   }, [fetchAlunos]);
 
   useFocusEffect(
@@ -33,8 +37,12 @@ export default function TabelaNotas({ navigation, route }) {
       if (route.params?.refresh) {
         navigation.setParams({ refresh: false });
       }
-    }, [reloadAlunos, route.params?.refresh, navigation])
+    }, [reloadAlunos, route?.params?.refresh, navigation])
   );
+
+  const onRefresh = useCallback(() => {
+    reloadAlunos();
+  }, [reloadAlunos]);
 
   return (
     <View style={styles.container}>
@@ -79,7 +87,16 @@ export default function TabelaNotas({ navigation, route }) {
       {error && <Text style={{ textAlign: 'center', marginVertical: 10, color: 'red' }}>{error}</Text>}
 
       {/* Tabela */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+      >
         <View style={styles.tableContainer}>
           <View style={styles.table}>
             <View style={[styles.row, styles.headerRow]}>
