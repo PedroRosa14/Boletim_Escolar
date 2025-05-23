@@ -70,44 +70,39 @@ O **Boletim Escolar** é um aplicativo mobile desenvolvido com React Native (Exp
    ```bash
    cd backend
    
-Instale as dependências:
+2. Instale as dependências `npm install`:
 
-bash
-Copiar
-Editar
+```bash
+
 npm install
 
-Configure as variáveis de ambiente no arquivo .env com as credenciais do Neon Database.
+3. Configure as variáveis de ambiente no arquivo .env com as credenciais do Neon Database .
 
-Inicie o servidor:
+4. Inicie o servidor `npm start`:
 
-bash
-Copiar
-Editar
+```bash
+
 npm start
 
 ### Frontend
 
-Frontend
-Navegue até a pasta Front_BoletimEscolar:
 
-bash
-Copiar
-Editar
+1. Navegue até a pasta Front_BoletimEscolar `Front_BoletimEscolar`:
+
+```bash
+
 cd Front_BoletimEscolar
 
-Instale as dependências:
+2. Instale as dependências `npm install`:
 
-bash
-Copiar
-Editar
+```bash
+
 npm install
 
-Inicie o aplicativo:
+3. Inicie o aplicativo `npm start`:
 
-bash
-Copiar
-Editar
+```bash
+
 npm start
 
 Utilize o aplicativo no emulador ou no seu dispositivo móvel através do Expo Go.
