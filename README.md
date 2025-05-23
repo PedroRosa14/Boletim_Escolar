@@ -113,11 +113,6 @@ npm start
 
 Utilize o aplicativo no emulador ou no seu dispositivo móvel através do Expo Go.
 
-📸 Capturas de Tela
-Tela Inicial
-
-Perfil do Aluno
-![Tela de Perfil](https://github.com/user-attachments/assets/b495ec87-7dcd-4a97-8207-64f0339ea2b4)
 
 
 🔗 [Link da nossa API](https://boletim-escolar-api.onrender.com/)
