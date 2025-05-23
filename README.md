@@ -1,37 +1,47 @@
 # 🎓 Boletim Escolar
-Aplicativo mobile para cadastro, consulta, edição e exclusão de alunos e suas notas escolares.
 
-## 📚 Sumário
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Funcionalidades](#funcionalidades)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Instalação e Execução](#instalação-e-execução)
-- [Licença](#licença)
-- [Contato](#contato)
+Aplicativo mobile para **cadastro, consulta, edição e exclusão** de alunos e suas notas escolares.
+
+---
 
 ## 📘 Sobre o Projeto
-O **Boletim Escolar** é um aplicativo mobile desenvolvido com React Native (Expo) que permite gerenciar alunos e suas respectivas notas escolares. Com uma interface intuitiva, é possível cadastrar alunos, atribuir notas, visualizar médias e gerenciar os registros de forma eficiente.
+
+O **Boletim Escolar** é um app mobile desenvolvido com **React Native (Expo)** e backend em **Node.js + PostgreSQL**, que permite:
+
+- Gerenciar alunos e suas notas escolares.
+- Calcular médias automaticamente.
+- Visualizar o desempenho de cada aluno com emojis de feedback.
+- Usar uma interface simples, bonita e intuitiva.
+
+---
 
 ## ✅ Funcionalidades
-- Cadastro de alunos com:
-  - Nome
-  - Notas de Matemática, Português e História
-  - Média calculada automaticamente
-  - Foto (URL)
-- Listagem de todos os alunos cadastrados
-- Visualização do perfil do aluno, incluindo média e emoji de satisfação
-- Edição dos dados e notas do aluno
-- Exclusão de alunos
-- Interface amigável e responsiva
+
+✨ **Cadastro completo de aluno**, incluindo:
+- Nome
+- Foto (via URL)
+- Notas de Matemática, Português e História
+- Cálculo automático da média
+- Emoji de avaliação baseado na média
+
+📋 **Outras funcionalidades:**
+- Listagem de todos os alunos
+- Visualização detalhada do perfil
+- Edição de dados e notas
+- Exclusão de aluno
+- Design responsivo e amigável
+
+---
 
 ## 🛠 Tecnologias Utilizadas
-### Frontend
+
+### 🔹 Frontend (React Native com Expo)
 - [React Native (Expo)](https://expo.dev/)
 - [Zustand](https://github.com/pmndrs/zustand)
 - [Axios](https://axios-http.com/)
 - [React Navigation](https://reactnavigation.org/)
 
-### Backend
+### 🔸 Backend (Node.js + PostgreSQL)
 - [Node.js](https://nodejs.org/)
 - [Express](https://expressjs.com/)
 - [PostgreSQL (Neon Database)](https://neon.tech/)
@@ -39,58 +49,49 @@ O **Boletim Escolar** é um aplicativo mobile desenvolvido com React Native (Exp
 - [Helmet](https://helmetjs.github.io/)
 - [Morgan](https://www.npmjs.com/package/morgan)
 
+---
+
 ## 🚀 Instalação e Execução
-### Pré-requisitos
+
+### ⚙️ Pré-requisitos
+
 - [Node.js](https://nodejs.org/) instalado
 - [Expo CLI](https://docs.expo.dev/get-started/installation/) instalado globalmente
-- Conta no [Neon Database](https://neon.tech/) para o banco de dados PostgreSQL
+- Conta no [Neon Database](https://neon.tech/)
 
-### Backend
-1. Navegue até a pasta `backend`:
+### 🖥 Backend
+
 ```bash
+# Acesse a pasta backend
 cd backend
-Instale as dependências:
 
-bash
-Copiar
-Editar
+# Instale as dependências
 npm install
-Configure as variáveis de ambiente no arquivo .env com as credenciais do Neon Database.
 
-Inicie o servidor:
+# Configure o arquivo .env com as credenciais do Neon Database
 
-bash
-Copiar
-Editar
+# Inicie o servidor
 npm start
-Frontend
-Navegue até a pasta Front_BoletimEscolar:
 
+📱 Frontend
 bash
 Copiar
 Editar
+# Acesse a pasta do frontend
 cd Front_BoletimEscolar
-Instale as dependências:
 
-bash
-Copiar
-Editar
+# Instale as dependências
 npm install
-Inicie o aplicativo:
 
-bash
-Copiar
-Editar
+# Inicie o app
 npm start
+
 Utilize o aplicativo no emulador ou no seu dispositivo móvel através do Expo Go.
 
-🔗 Link da nossa API
-
-📄 Licença
-Este projeto está sob a licença MIT.
+🔗 [Link da nossa API](https://boletim-escolar-api.onrender.com/)
 
 📬 Contato
-Pedro F - @PedroRosa14
-Kauã - @Kaualuiz12
-Igor - @igolwb / @_Ingoat
-Elias - @EliasDeAlencar
+Pedro F -@PedroRosa14 Pedro
+kauã - @Kaualuiz12
+igor - @igolwb @_Ingoat
+Elias -@EliasDeAlencar
