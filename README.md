@@ -85,6 +85,20 @@ Ele permite gerenciar alunos, cadastrar notas, calcular médias e exibir emojis 
 
 Utilize o aplicativo no emulador ou no seu dispositivo móvel através do Expo Go.
 
+## 📸 Demonstração do Projeto
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f59747b7-5f69-4d5e-ad4b-a8189e8eb07e" width="200" height= "200" alt="Tabela de Alunos" >
+   <img src="https://github.com/user-attachments/assets/8433666e-dae1-4b72-93ca-1f9cbd70406d" width="200" height= "200"  alt="Perfil do Aluno" >
+  <img src="https://github.com/user-attachments/assets/16c14046-c529-4253-bfb2-28a6279e7771" width="200" height= "200" alt="Tabela de Salvar" >
+  <img src="https://github.com/user-attachments/assets/570f6c0b-c82c-493c-be63-af4c6d044e45" width="200" height= "200" alt="Tabela de Excluir" > 
+</p>
+
+<p align="center">
+  <em>Interface com Tabela Inicial, Perfil do Aluno,  Tabela de Salvar Notas e Tabela de Excluir Notas</em>
+</p>
+
+
 🔗 [Link da nossa API](https://boletim-escolar-api.onrender.com/)
 
 📬 Contato
