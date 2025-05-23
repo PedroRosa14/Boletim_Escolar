@@ -75,6 +75,15 @@ npm install
 # Inicie o aplicativo
 npm start
 
+## 📸 Capturas de Tela
+
+![Tela Inicial](https://github.com/user-attachments/assets/980ed9b5-1c4a-4d20-add8-6a2d865bd09f)
+
+![Tela de Perfil](https://github.com/user-attachments/assets/5e612a3d-f600-4e7c-bd54-2bdc719eae33)
+
+
+
+
 🔗 [Link da nossa API](https://boletim-escolar-api.onrender.com/)
 
 🤝 Contribuições
