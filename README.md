@@ -10,7 +10,6 @@ Aplicativo mobile para cadastro, consulta, edição e exclusão de alunos e suas
 - [Funcionalidades](#funcionalidades)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Instalação e Execução](#instalação-e-execução)
-- [Capturas de Tela](#capturas-de-tela)
 - [Licença](#licença)
 - [Contato](#contato)
 
