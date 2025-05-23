@@ -1,20 +1,16 @@
-🎓 Boletim Escolar
+# 🎓 Boletim Escolar
 
-Um sistema completo para gerenciamento de notas e turmas escolares, com arquitetura full stack: front-end em React Native e back-end em Java (Spring Boot)/MySQL. Permite cadastrar alunos, professores, disciplinas e notas, além de consultar boletins escolares com interface moderna e intuitiva.
+Aplicativo mobile para cadastro, consulta, edição e exclusão de alunos e suas notas escolares.
 
 ---
 
-📚 Sumário
+## 📚 Sumário
 
 - [Sobre o Projeto](#sobre-o-projeto)
-- [Arquitetura & Estrutura de Pastas](#arquitetura--estrutura-de-pastas)
 - [Funcionalidades](#funcionalidades)
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Guia de Instalação (Passo a Passo)](#guia-de-instalação-passo-a-passo)
-- [Como Usar](#como-usar)
-- [Configuração de Ambiente](#configuração-de-ambiente)
-- [Principais Endpoints da API](#principais-endpoints-da-api)
-- [Fluxo de Desenvolvimento e Contribuição](#fluxo-de-desenvolvimento-e-contribuição)
+- [Instalação e Execução](#instalação-e-execução)
+- [Capturas de Tela](#capturas-de-tela)
 - [Licença](#licença)
 - [Contato](#contato)
 
@@ -22,126 +18,107 @@ Um sistema completo para gerenciamento de notas e turmas escolares, com arquitet
 
 ## 📘 Sobre o Projeto
 
-O sistema **Boletim Escolar** foi desenvolvido para auxiliar escolas e professores a gerenciarem alunos e notas de maneira centralizada e eficiente. Ele conta com uma API RESTful para manipulação dos dados e uma interface mobile amigável.
-
-- **Front-end React Native**: Interface de fácil uso voltada para alunos e professores.
-- **Back-end Java (Spring Boot)/MySQL**: API segura e escalável para controle dos dados escolares.
-
----
-
-## 🗂️ Arquitetura & Estrutura de Pastas
-
-Boletim_Escolar/
-│
-├── backend/ # API RESTful (Java, Spring Boot, MySQL)
-│ ├── src/main/java/... # Código-fonte Java (controllers, services, models, etc.)
-│ ├── src/main/resources/ # Configurações (application.properties)
-│ ├── pom.xml # Dependências do projeto
-│
-├── frontend/ # Aplicativo em React Native
-│ ├── src/
-│ │ ├── components/ # Componentes reutilizáveis
-│ │ ├── screens/ # Telas principais (Login, Home, Alunos, Notas, etc.)
-│ │ ├── services/ # Conexão com a API
-│ │ └── App.js # Componente principal
-│ ├── package.json
-│
-├── README.md
-└── LICENSE
-
+O **Boletim Escolar** é um aplicativo mobile desenvolvido com React Native (Expo) que permite gerenciar alunos e suas respectivas notas escolares. Com uma interface intuitiva, é possível cadastrar alunos, atribuir notas, visualizar médias e gerenciar os registros de forma eficiente.
 
 ---
 
 ## ✅ Funcionalidades
 
-### Front-end
-
-- Login de alunos e professores.
-- Cadastro e listagem de alunos.
-- Cadastro e listagem de notas por disciplina.
-- Visualização de boletim por aluno.
-- Design responsivo e navegação intuitiva.
-
-### Back-end
-
-- API estruturada com Spring Boot e MVC.
-- CRUD completo de alunos, disciplinas e notas.
-- Validação e autenticação (opcional).
-- Conexão com banco de dados MySQL.
+- Cadastro de alunos com:
+  - Nome
+  - Notas de Matemática, Português e História
+  - Média calculada automaticamente
+  - Foto (URL)
+- Listagem de todos os alunos cadastrados
+- Visualização do perfil do aluno, incluindo média e emoji de satisfação
+- Edição dos dados e notas do aluno
+- Exclusão de alunos
+- Interface amigável e responsiva
 
 ---
 
 ## 🛠 Tecnologias Utilizadas
 
-### Front-end
-- React Native
-- JavaScript (ES6+)
-- Axios
-- React Navigation
+### Frontend
 
-### Back-end
-- Java
-- Spring Boot
-- Spring Data JPA
-- MySQL
-- Maven
+- [React Native (Expo)](https://expo.dev/)
+- [Zustand](https://github.com/pmndrs/zustand)
+- [Axios](https://axios-http.com/)
+- [React Navigation](https://reactnavigation.org/)
+
+### Backend
+
+- [Node.js](https://nodejs.org/)
+- [Express](https://expressjs.com/)
+- [PostgreSQL (Neon Database)](https://neon.tech/)
+- [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless)
+- [Helmet](https://helmetjs.github.io/)
+- [Morgan](https://www.npmjs.com/package/morgan)
 
 ---
 
-## 🧩 Guia de Instalação (Passo a Passo)
+## 🚀 Instalação e Execução
 
-### 1. Clone o repositório
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) instalado
+- [Expo CLI](https://docs.expo.dev/get-started/installation/) instalado globalmente
+- Conta no [Neon Database](https://neon.tech/) para o banco de dados PostgreSQL
+
+### Backend
+
+1. Navegue até a pasta `backend`:
+   ```bash
+   cd backend
+   
+Instale as dependências:
+
 bash
-git clone https://github.com/PedroRosa14/Boletim_Escolar.git
-cd Boletim_Escolar
-cd backend
-* Configure o application.properties com as credenciais do MySQL
-./mvnw spring-boot:run
-spring.datasource.url=jdbc:mysql://localhost:3306/boletim_escolar
-spring.datasource.username=root
-spring.datasource.password=senha
-server.port=8080
-cd ../frontend
+Copiar
+Editar
 npm install
+
+Configure as variáveis de ambiente no arquivo .env com as credenciais do Neon Database.
+
+Inicie o servidor:
+
+bash
+Copiar
+Editar
 npm start
 
-🚀 Como Usar
-Acesse o app via emulador ou celular com Expo Go.
+### Frontend
 
-Faça login como professor ou aluno.
+Frontend
+Navegue até a pasta Front_BoletimEscolar:
 
-Gerencie alunos, disciplinas e notas.
+bash
+Copiar
+Editar
+cd Front_BoletimEscolar
 
-Visualize o boletim atualizado de cada estudante.
+Instale as dependências:
 
-⚙️ Configuração de Ambiente
-Back-end: application.properties com dados do banco.
+bash
+Copiar
+Editar
+npm install
 
-Front-end: .env com a URL da API (se aplicável).
+Inicie o aplicativo:
 
-📡 Principais Endpoints da API
-GET    /alunos               - Lista todos os alunos
-POST   /alunos               - Cria novo aluno
-GET    /alunos/{id}          - Detalhes de um aluno
-PUT    /alunos/{id}          - Atualiza aluno
-DELETE /alunos/{id}          - Remove aluno
+bash
+Copiar
+Editar
+npm start
 
-POST   /notas                - Cadastra nota
-GET    /notas/boletim/{id}   - Boletim do aluno
+Utilize o aplicativo no emulador ou no seu dispositivo móvel através do Expo Go.
 
-🔃 Fluxo de Desenvolvimento e Contribuição
-Faça um fork do projeto
+📸 Capturas de Tela
+Tela Inicial
 
-Crie uma branch (git checkout -b feature/NovaFeature)
+Perfil do Aluno
+![Tela de Perfil](https://github.com/user-attachments/assets/b495ec87-7dcd-4a97-8207-64f0339ea2b4)
 
-Commit suas alterações (git commit -m 'Adiciona NovaFeature')
-
-Push para a branch (git push origin feature/NovaFeature)
-
-Abra um Pull Request
-
-📄 Licença
-Distribuído sob a licença MIT. Veja LICENSE para mais informações.
 
 🔗 [Link da nossa API](https://boletim-escolar-api.onrender.com/)
 
