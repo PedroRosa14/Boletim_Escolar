@@ -81,7 +81,7 @@ Ele permite gerenciar alunos, cadastrar notas, calcular médias e exibir emojis 
 - npm install
 
 ### Inicie o aplicativo
-- npm start
+- npx expo start --tunnel
 
 Utilize o aplicativo no emulador ou no seu dispositivo móvel através do Expo Go.
 
