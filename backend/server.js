@@ -19,9 +19,7 @@ const PORT = process.env.PORT || 3000;
 const swaggerDocument = YAML.load(path.join(process.cwd(), 'docs', 'swagger.yaml')); // Assumindo que swagger.yaml está na pasta 'docs' na raiz do projeto
 
 // Middlewares
-app.use(cors({
-  origin: 'https://ls2nml4-anonymous-8081.exp.direct', // Substitua pela URL do seu frontend no Render quando for para produção
-}));
+app.use(cors());
 
 app.use(express.json());
 app.use(helmet());
