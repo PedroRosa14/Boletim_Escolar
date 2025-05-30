@@ -55,6 +55,50 @@ Ele permite gerenciar alunos, cadastrar notas, calcular médias e exibir emojis 
 - Conta no [Neon Database](https://neon.tech/) para o banco de dados
 
 ---
+## 📂 Estrutura de Pastas
+
+<pre>
+Boletim_Escolar
+│
+├── backend/                                # Código do backend (Node.js + Express + PostgreSQL)
+│   ├── config/                             # Configurações de banco de dados
+│   │   └── db.js
+│   ├── controller/                         # Lógica dos controladores
+│   │   └── alunoController.js
+│   ├── routes/                             # Definição de rotas da API
+│   │   └── alunoRoutes.js
+│   ├── src/
+│   │   └── server.js                       # Inicialização do servidor
+│   ├── package.json                        # Dependências do Node.js
+│   ├── package-lock.json                   # Lockfile do NPM
+│   └── README.md                           # Documentação do backend
+│
+├── Front_BoletimEscolar/                   # Aplicativo mobile (React Native com Expo)
+│   ├── .expo/                              # Arquivos de cache do Expo
+│   ├── assets/                             # Imagens, ícones e fontes
+│   ├── node_modules/                       # Módulos instalados pelo NPM
+│   ├── src/
+│   │   ├── Pages/                          # Telas da aplicação
+│   │   │   ├── Adicionar/
+│   │   │   ├── Editar/
+│   │   │   ├── Excluir/
+│   │   │   ├── Ler/
+│   │   │   └── Perfil/
+│   │   ├── routes/
+│   │   │   └── AppNavigator.js             # Navegação entre as páginas
+│   │   ├── services/                       # Comunicação com a API backend
+│   │   └── App.js                          # Componente principal da aplicação
+│   ├── app.json                            # Configuração do projeto Expo
+│   ├── index.js                            # Ponto de entrada do app
+│   ├── package.json                        # Dependências do projeto React Native
+│   ├── package-lock.json                   # Lockfile do NPM
+│   └── README.md                           # Documentação do frontend
+│
+├── docs/                                   # Documentação adicional do projeto
+
+</pre>
+
+--
 
 ## 📱 Frontend
 
