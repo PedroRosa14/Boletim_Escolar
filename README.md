@@ -56,22 +56,6 @@ Ele permite gerenciar alunos, cadastrar notas, calcular médias e exibir emojis 
 
 ---
 
-### 📂 Backend
-
-
-### Acesse a pasta do backend
-- cd backend
-
-### Instale as dependências
-- npm install
-
-### Configure o arquivo .env com as credenciais do Neon Database
-
-### Inicie o servidor
-- npm start
-
----
-
 ## 📱 Frontend
 
 ### Acesse a pasta do frontend
