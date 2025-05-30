@@ -1,0 +1,348 @@
+
+openapi: 3.0.0
+info:
+  title: API de Boletim Escolar - Alunos
+  version: v1
+  description: API para gerenciar informações de alunos e seus boletins escolares.
+
+servers:
+  - url: https://boletim-escolar-api.onrender.com
+    description: Servidor de produção
+
+paths:
+  /:
+    get:
+      summary: Buscar todos os alunos
+      description: Retorna uma lista de todos os alunos cadastrados.
+      responses:
+        '200':
+          description: Lista de alunos obtida com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Aluno'
+        '500':
+          description: Erro interno no servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Erro interno no servidor"
+
+    post:
+      summary: Adicionar um novo aluno
+      description: Adiciona um novo aluno ao sistema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                  example: "Novo Aluno"
+                notamat:
+                  type: string
+                  example: "8.5"
+                notaport:
+                  type: string
+                  example: "9.0"
+                notahist:
+                  type: string
+                  example: "7.5"
+                notamedia:
+                  type: string
+                  example: "8.3"
+                url:
+                  type: string
+                  nullable: true
+                  example: "https://exemplo.com/novoaluno.jpg"
+              required:
+                - nome
+                - notamat
+                - notaport
+                - notahist
+                - notamedia
+      responses:
+        '201':
+          description: Aluno adicionado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Aluno'
+        '400':
+          description: Requisição inválida - Preencha todos os campos obrigatórios.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Preencha todos os campos!"
+        '500':
+          description: Erro interno no servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Erro interno no servidor"
+
+  "/{id}":
+    get:
+      summary: Buscar aluno por ID
+      description: Retorna os detalhes de um aluno específico com base no seu ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID do aluno a ser buscado.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Aluno encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Aluno'
+        '400':
+          description: ID do aluno inválido.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "O ID do aluno deve ser um número inteiro válido."
+        '404':
+          description: Aluno não encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Aluno não encontrado"
+        '500':
+          description: Erro interno no servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Erro interno no servidor"
+
+    put:
+      summary: Atualizar aluno por ID
+      description: Atualiza as informações de um aluno específico com base no seu ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID do aluno a ser atualizado.
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                  example: "Aluno Atualizado"
+                notamat:
+                  type: string
+                  example: "7.0"
+                notaport:
+                  type: string
+                  example: "8.0"
+                notahist:
+                  type: string
+                  example: "6.5"
+                notamedia:
+                  type: string
+                  example: "7.2"
+                url:
+                  type: string
+                  nullable: true
+                  example: "https://exemplo.com/alunoatualizado.jpg"
+      responses:
+        '200':
+          description: Aluno atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Aluno'
+        '404':
+          description: Aluno não encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Aluno não encontrado"
+        '500':
+          description: Erro interno no servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Erro interno no servidor"
+
+    delete:
+      summary: Deletar aluno por ID
+      description: Deleta um aluno específico com base no seu ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID do aluno a ser deletado.
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Aluno deletado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Aluno'
+        '404':
+          description: Aluno não encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "aluno não encontrado"
+        '500':
+          description: Erro interno no servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Erro interno no servidor"
+
+components:
+  schemas:
+    Aluno:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID único do aluno.
+          example: 71
+        nome:
+          type: string
+          description: Nome completo do aluno.
+          example: "CR7"
+        notamat:
+          type: string
+          description: Nota do aluno em matemática.
+          example: "7.0"
+        notaport:
+          type: string
+          description: Nota do aluno em português.
+          example: "7.0"
+        notahist:
+          type: string
+          description: Nota do aluno em história.
+          example: "7.0"
+        notamedia:
+          type: string
+          description: Média geral das notas do aluno.
+          example: "7.0"
+        url:
+          type: string
+          nullable: true
+          description: URL da imagem do aluno (opcional).
+          example: "https://th.bing.com/th/id/OIP.FbEUr2fs2Z1NazchVp7jPQHaEK?rs=1&pid=ImgDetMain"
