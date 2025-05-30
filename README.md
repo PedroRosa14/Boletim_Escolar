@@ -131,6 +131,8 @@ Utilize o aplicativo no emulador ou no seu dispositivo móvel através do Expo G
 
 🔗 [Link da nossa Documentação](https://boletim-escolar-api.onrender.com/api-docs/)
 
+🔗 [Link do nosso Figma](https://www.figma.com/design/W6ZS9LKLYGmQ7JYWt7w7bQ/?node-id=0-1&p=f)
+
 📬 Contato
 Pedro F -@PedroRosa14 Pedro
 kauã - @Kaualuiz12
